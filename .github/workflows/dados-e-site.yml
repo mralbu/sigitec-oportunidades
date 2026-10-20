@@ -1,8 +1,6 @@
-# Atualiza data/oportunidades.csv uma vez por semana (sync incremental) e publica o site
-# estático de site/ no GitHub Pages com o CSV atualizado.
+# Atualiza data/oportunidades.csv uma vez por semana (sync incremental).
 #
-# O push feito com o GITHUB_TOKEN não dispara outros workflows; por isso o deploy fica
-# neste mesmo arquivo, logo depois do sync.
+# O deploy do site no GitHub Pages está desativado enquanto o repositório é privado.
 name: Dados e site
 
 on:
@@ -14,12 +12,6 @@ on:
         description: "Baixar de novo os detalhes de todas as oportunidades (--full)"
         type: boolean
         default: false
-  push:
-    branches: [main]
-    paths:
-      - "site/**"
-      - "data/oportunidades.csv"
-      - ".github/workflows/dados-e-site.yml"
 
 permissions:
   contents: read
@@ -33,7 +25,6 @@ env:
 
 jobs:
   sync:
-    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -78,41 +69,3 @@ jobs:
           git add "$CSV"
           git commit -m "Atualiza oportunidades.csv ($(date -u +%Y-%m-%d))"
           git push
-
-  deploy:
-    needs: sync
-    # Roda também no push (quando o sync é pulado), mas não se o sync falhar.
-    if: ${{ !cancelled() && needs.sync.result != 'failure' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      # O ref (e não o sha do evento) para pegar o commit que o sync acabou de fazer.
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.ref }}
-          fetch-depth: 0
-
-      - name: Montar o site
-        run: |
-          mkdir -p _site
-          cp -r site/. _site/
-          cp "$CSV" _site/oportunidades.csv
-          printf '{"updatedAt": "%s", "commit": "%s"}\n' \
-            "$(git log -1 --format=%cI -- "$CSV")" "$(git rev-parse --short HEAD)" \
-            > _site/meta.json
-
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: _site
-
-      - id: deployment
-        uses: actions/deploy-pages@v4
