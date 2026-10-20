@@ -21,6 +21,8 @@ class Filter:
     statuses: set[str] = field(default_factory=set)
     after: date | None = None
     before: date | None = None
+    # Valor exato por coluna (ex.: {"theme": "Refino"}), usado pelos menus da TUI.
+    equals: dict[str, str] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.terms = [norm(t) for t in self.terms]
@@ -30,6 +32,8 @@ class Filter:
         if self.statuses and o["status"] not in self.statuses:
             return False
         if self.code is not None and o["numberOP"] != self.code:
+            return False
+        if any(o.get(k) != v for k, v in self.equals.items()):
             return False
         if not (
             _contains(o.get("titleOP"), self.title)
@@ -82,6 +86,11 @@ def stat_values(o: dict, key: str) -> list[str]:
         return [p for p in partners if p != PENDING_PARTNER]
     v = o.get(key)
     return [str(v).strip()] if v not in (None, "") else []
+
+
+def distinct(rows: Iterable[dict], key: str) -> list[str]:
+    """Valores distintos e não vazios de uma coluna, em ordem alfabética."""
+    return sorted({v for o in rows if (v := o.get(key))}, key=norm)
 
 
 def column_stats(rows: list[dict], key: str) -> tuple[Counter[str], int]:

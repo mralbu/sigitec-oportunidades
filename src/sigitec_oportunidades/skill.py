@@ -71,6 +71,14 @@ detalhes, então rode `sync` antes.
 | `--json` | Saída em JSON |
 | `-r, --refresh` | Roda `sync` antes |
 
+### `tui [QUERY...]` — interface interativa
+
+Navega pelas oportunidades do CSV num terminal (Textual): filtros à esquerda (termos,
+status, área, tema, subtema, TRL, solução esperada, intervalo do prazo, ordenação),
+tabela de resultados e detalhe em Markdown da linha selecionada. `QUERY`, `-s/--status`
+e `--open` definem os filtros iniciais. Teclas: `/` buscar, `f` mostrar/ocultar
+filtros, `x` limpar filtros, `o` abrir a página no navegador, `q` sair.
+
 ### `completion SHELL` — script de autocompletar
 
 `SHELL` é `bash`, `zsh` ou `fish`. Exemplos:

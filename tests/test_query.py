@@ -43,6 +43,16 @@ def test_filter_fields(rows, kw, expected):
     assert ops(rows, **kw) == expected
 
 
+def test_filter_equals(rows):
+    assert ops(rows, equals={"theme": "Produção"}) == [3459]
+    assert ops(rows, equals={"theme": "Produ"}) == []  # exato, não trecho
+
+
+def test_distinct(rows):
+    assert query.distinct(rows.values(), "status") == ["A", "F"]
+    assert query.distinct(rows.values(), "theme") == ["Produção"]
+
+
 def test_search_sort_ascending(rows):
     found = query.search(rows.values(), query.Filter(), "number", asc=True)
     assert [o["numberOP"] for o in found] == [900, 3400, 3459]

@@ -342,6 +342,29 @@ def stats(
 
 
 @cli.command()
+@click.argument("terms", metavar="QUERY", nargs=-1)
+@status_option
+@open_option
+@refresh_option
+@click.pass_obj
+def tui(
+    csv_path: Path,
+    terms: tuple[str, ...],
+    statuses: tuple[str, ...],
+    only_open: bool,
+    refresh: bool,
+) -> None:
+    """Navega e filtra as oportunidades numa interface interativa.
+
+    QUERY, --status e --open definem os filtros iniciais.
+    """
+    from .tui import OpportunitiesApp  # importa o Textual só quando necessário
+
+    rows = list(store.get_rows(csv_path, refresh).values())
+    OpportunitiesApp(rows, " ".join(terms), selected_statuses(statuses, only_open)).run()
+
+
+@cli.command()
 @click.argument("shell", type=click.Choice(SHELLS))
 def completion(shell: str) -> None:
     """Imprime o script de autocompletar para SHELL (bash, zsh ou fish).

@@ -14,6 +14,7 @@ sigitec-oportunidades sync        # baixa listagem e detalhes (incremental)
 sigitec-oportunidades search --open
 sigitec-oportunidades show OP3449
 sigitec-oportunidades stats --open -c theme
+sigitec-oportunidades tui --open      # interface interativa com filtros
 ```
 
 O CSV fica no diretório de dados do usuário (veja `--help`); use `--csv ARQUIVO` ou
@@ -53,5 +54,6 @@ e instala o autocompletar do fish em `~/.config/fish/completions`.
 | `query.py` | Filtros do `search` e contagens do `stats` (funções puras) |
 | `render.py` | Normalização de texto, datas e Markdown |
 | `cli.py` | Comandos (click) |
+| `tui.py` | Interface interativa (Textual) |
 | `skill.py` | Texto do comando `skill` |
 | `constants.py` | URLs, status e colunas do CSV |
