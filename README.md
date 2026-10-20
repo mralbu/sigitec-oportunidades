@@ -7,7 +7,7 @@ Os dados são baixados para um CSV local (`sync`) e consultados offline (`search
 `stats`). A documentação completa do CLI e da API está em `sigitec-oportunidades skill`.
 
 **Web:** <https://mralbu.github.io/sigitec-oportunidades/>. Busca, filtros e estatísticas
-no navegador, com os dados atualizados todo mês (sem instalar nada).
+no navegador, com os dados atualizados toda semana (sem instalar nada).
 
 ## Instalação
 
@@ -33,8 +33,8 @@ sigitec-oportunidades completion fish > ~/.config/fish/completions/sigitec-oport
 
 ## Dados e site
 
-O workflow [`dados-e-site.yml`](.github/workflows/dados-e-site.yml) roda no dia 1 de cada
-mês (ou manualmente, em *Actions → Dados e site → Run workflow*): faz o `sync` incremental
+O workflow [`dados-e-site.yml`](.github/workflows/dados-e-site.yml) roda toda segunda-feira
+(ou manualmente, em *Actions → Dados e site → Run workflow*): faz o `sync` incremental
 de [`data/oportunidades.csv`](data/oportunidades.csv), commita o CSV se mudou e publica no
 GitHub Pages o site estático de [`site/`](site/), com busca, filtros, detalhe e
 estatísticas no navegador (os mesmos recursos da `tui` e do `stats`), em

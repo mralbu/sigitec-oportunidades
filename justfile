@@ -38,7 +38,7 @@ pre-commit-install:
 run *args:
     uv run sigitec-oportunidades {{ args }}
 
-# Atualiza data/oportunidades.csv (o mesmo que o GitHub Actions faz todo mês)
+# Atualiza data/oportunidades.csv (o mesmo que o GitHub Actions faz toda semana)
 update-data *args:
     uv run sigitec-oportunidades --csv data/oportunidades.csv sync {{ args }}
 

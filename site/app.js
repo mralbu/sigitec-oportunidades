@@ -118,7 +118,7 @@ async function load() {
   }
   const parts = [`${nf.format(rows.length)} oportunidades`];
   if (updated && parseDate(updated)) parts.push(`dados de ${fmtDate(updated)}`);
-  parts.push("atualizado mensalmente a partir do SIGITEC Competitividade");
+  parts.push("atualizado semanalmente a partir do SIGITEC Competitividade");
   $("#meta").textContent = parts.join(" · ");
 }
 

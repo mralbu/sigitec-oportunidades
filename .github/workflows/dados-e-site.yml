@@ -1,4 +1,4 @@
-# Atualiza data/oportunidades.csv uma vez por mês (sync incremental) e publica o site
+# Atualiza data/oportunidades.csv uma vez por semana (sync incremental) e publica o site
 # estático de site/ no GitHub Pages com o CSV atualizado.
 #
 # O push feito com o GITHUB_TOKEN não dispara outros workflows; por isso o deploy fica
@@ -7,7 +7,7 @@ name: Dados e site
 
 on:
   schedule:
-    - cron: "17 9 1 * *" # dia 1 de cada mês, 06:17 em Brasília
+    - cron: "17 9 * * 1" # toda segunda-feira, 06:17 em Brasília
   workflow_dispatch:
     inputs:
       full:
@@ -65,7 +65,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$CSV"
-          git commit -m "Atualiza oportunidades.csv ($(date -u +%Y-%m))"
+          git commit -m "Atualiza oportunidades.csv ($(date -u +%Y-%m-%d))"
           git push
 
   deploy:
