@@ -6,6 +6,9 @@ CLI para buscar as oportunidades públicas de P&D da Petrobras no
 Os dados são baixados para um CSV local (`sync`) e consultados offline (`search`, `show`,
 `stats`). A documentação completa do CLI e da API está em `sigitec-oportunidades skill`.
 
+**Web:** <https://mralbu.github.io/sigitec-oportunidades/>. Busca, filtros e estatísticas
+no navegador, com os dados atualizados todo mês (sem instalar nada).
+
 ## Instalação
 
 ```sh
@@ -34,10 +37,12 @@ O workflow [`dados-e-site.yml`](.github/workflows/dados-e-site.yml) roda no dia 
 mês (ou manualmente, em *Actions → Dados e site → Run workflow*): faz o `sync` incremental
 de [`data/oportunidades.csv`](data/oportunidades.csv), commita o CSV se mudou e publica no
 GitHub Pages o site estático de [`site/`](site/), com busca, filtros, detalhe e
-estatísticas no navegador (os mesmos recursos da `tui` e do `stats`). Pushes em `site/`
-ou no CSV também republicam o site.
+estatísticas no navegador (os mesmos recursos da `tui` e do `stats`), em
+<https://mralbu.github.io/sigitec-oportunidades/>. Pushes em `site/` ou no CSV também
+republicam o site.
 
-Para ativar: em *Settings → Pages*, escolha **GitHub Actions** como *Source*.
+O Pages usa **GitHub Actions** como *Source* (*Settings → Pages*, ou
+`gh api -X POST repos/OWNER/REPO/pages -f build_type=workflow` num fork).
 
 ```sh
 just update-data   # sync de data/oportunidades.csv localmente
