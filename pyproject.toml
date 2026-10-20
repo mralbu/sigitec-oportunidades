@@ -1,0 +1,42 @@
+[project]
+name = "sigitec-oportunidades"
+version = "0.1.0"
+description = "CLI para buscar oportunidades públicas de P&D no SIGITEC Competitividade (Petrobras)"
+readme = "README.md"
+authors = [
+    { name = "mralbu", email = "marceloralbuquerque@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "click>=8.1",
+    "httpx2>=2.13,<3",
+    "rich>=13",
+]
+
+[project.scripts]
+sigitec-oportunidades = "sigitec_oportunidades:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.12",
+    "ty>=0.0.1a20",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tabelas Markdown do texto do `skill`.
+"src/sigitec_oportunidades/skill.py" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra", "--strict-markers"]
