@@ -1,6 +1,9 @@
 # Hooks do prek (https://prek.j178.dev). Instale com `just pre-commit-install`.
 # Ruff, ty e pytest rodam via `uv run`, com as versões travadas no uv.lock.
 default_install_hook_types: [pre-commit, pre-push]
+# O CSV é gerado pelo `sync` (quebras de linha \r\n do csv, BOM, campos com espaços):
+# os hooks de texto não podem reescrevê-lo.
+exclude: ^data/
 
 repos:
   - repo: builtin

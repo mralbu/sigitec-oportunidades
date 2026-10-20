@@ -8,6 +8,9 @@ build/
 .pytest_cache/
 .ruff_cache/
 *.csv
+# CSV atualizado mensalmente pelo GitHub Actions e publicado no site.
+!data/oportunidades.csv
+_site/
 *.csv.tmp
 
-oportunidades.csv
+/oportunidades.csv

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGITEC Oportunidades</title>
+  <meta name="description" content="Busca e estatísticas das oportunidades públicas de P&amp;D da Petrobras no SIGITEC Competitividade, atualizadas mensalmente.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='9' width='3' height='6' rx='1' fill='%232a78d6'/%3E%3Crect x='6.5' y='5' width='3' height='10' rx='1' fill='%232a78d6'/%3E%3Crect x='12' y='1' width='3' height='14' rx='1' fill='%232a78d6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>SIGITEC Oportunidades</h1>
+      <p class="sub" id="meta">Carregando…</p>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="tab-list" aria-selected="true" aria-controls="view-list">Lista</button>
+      <button role="tab" id="tab-stats" aria-selected="false" aria-controls="view-stats">Estatísticas</button>
+    </nav>
+    <button class="ghost" id="toggle-filters" aria-expanded="true" aria-controls="filters" title="Filtros (f)">Filtros</button>
+  </header>
+
+  <div class="layout">
+    <aside id="filters" aria-label="Filtros">
+      <label for="terms">Busca (todos os termos)</label>
+      <input id="terms" type="search" placeholder="título, desafio, tema…" autocomplete="off" title="Atalho: /">
+
+      <fieldset>
+        <legend>Status</legend>
+        <div id="statuses" class="checks"></div>
+      </fieldset>
+
+      <div id="exact"></div>
+
+      <fieldset>
+        <legend>Prazo de proposta</legend>
+        <div class="dates">
+          <input id="after" type="date" aria-label="de">
+          <input id="before" type="date" aria-label="até">
+        </div>
+      </fieldset>
+
+      <label for="sort">Ordenar por</label>
+      <div class="sortrow">
+        <select id="sort">
+          <option value="deadline">Prazo de proposta</option>
+          <option value="number">Número da OP</option>
+          <option value="published">Publicação</option>
+        </select>
+        <label class="check"><input id="asc" type="checkbox"> Crescente</label>
+      </div>
+
+      <button id="reset" class="ghost wide" title="Limpar filtros (x)">Limpar filtros</button>
+      <p class="hint">Atalhos: <kbd>/</kbd> busca · <kbd>j</kbd>/<kbd>k</kbd> navega · <kbd>o</kbd> abre no SIGITEC · <kbd>x</kbd> limpa · <kbd>f</kbd> filtros</p>
+    </aside>
+
+    <main>
+      <section id="view-list" role="tabpanel" aria-labelledby="tab-list">
+        <div class="list-pane">
+          <p class="count" id="count" aria-live="polite"></p>
+          <div class="table-wrap">
+            <table id="results">
+              <thead>
+                <tr><th>OP</th><th>Prazo</th><th>Status</th><th>Título</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <article id="detail" aria-live="polite"></article>
+      </section>
+
+      <section id="view-stats" role="tabpanel" aria-labelledby="tab-stats" hidden>
+        <div class="tiles" id="tiles"></div>
+        <div class="charts" id="charts"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="tooltip" role="tooltip" hidden></div>
+</body>
+</html>

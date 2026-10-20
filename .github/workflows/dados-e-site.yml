@@ -1,0 +1,107 @@
+# Atualiza data/oportunidades.csv uma vez por mês (sync incremental) e publica o site
+# estático de site/ no GitHub Pages com o CSV atualizado.
+#
+# O push feito com o GITHUB_TOKEN não dispara outros workflows; por isso o deploy fica
+# neste mesmo arquivo, logo depois do sync.
+name: Dados e site
+
+on:
+  schedule:
+    - cron: "17 9 1 * *" # dia 1 de cada mês, 06:17 em Brasília
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Baixar de novo os detalhes de todas as oportunidades (--full)"
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "data/oportunidades.csv"
+      - ".github/workflows/dados-e-site.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dados-e-site
+  cancel-in-progress: false
+
+env:
+  CSV: data/oportunidades.csv
+
+jobs:
+  sync:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Instalar
+        run: uv sync --frozen --no-dev
+
+      - name: Sync
+        env:
+          FULL: ${{ inputs.full && '--full' || '' }}
+        run: |
+          uv run --frozen sigitec-oportunidades --csv "$CSV" sync $FULL --retries 3
+          # O SIGITEC às vezes fica instável: uma segunda passada só baixa o que faltou.
+          uv run --frozen sigitec-oportunidades --csv "$CSV" sync --retries 3
+
+      - name: Commit do CSV
+        run: |
+          if git diff --quiet -- "$CSV"; then
+            echo "CSV sem mudanças."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$CSV"
+          git commit -m "Atualiza oportunidades.csv ($(date -u +%Y-%m))"
+          git push
+
+  deploy:
+    needs: sync
+    # Roda também no push (quando o sync é pulado), mas não se o sync falhar.
+    if: ${{ !cancelled() && needs.sync.result != 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # O ref (e não o sha do evento) para pegar o commit que o sync acabou de fazer.
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Montar o site
+        run: |
+          mkdir -p _site
+          cp -r site/. _site/
+          cp "$CSV" _site/oportunidades.csv
+          printf '{"updatedAt": "%s", "commit": "%s"}\n' \
+            "$(git log -1 --format=%cI -- "$CSV")" "$(git rev-parse --short HEAD)" \
+            > _site/meta.json
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

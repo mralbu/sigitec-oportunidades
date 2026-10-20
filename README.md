@@ -28,6 +28,22 @@ eval "$(sigitec-oportunidades completion zsh)"    # ~/.zshrc
 sigitec-oportunidades completion fish > ~/.config/fish/completions/sigitec-oportunidades.fish
 ```
 
+## Dados e site
+
+O workflow [`dados-e-site.yml`](.github/workflows/dados-e-site.yml) roda no dia 1 de cada
+mês (ou manualmente, em *Actions → Dados e site → Run workflow*): faz o `sync` incremental
+de [`data/oportunidades.csv`](data/oportunidades.csv), commita o CSV se mudou e publica no
+GitHub Pages o site estático de [`site/`](site/), com busca, filtros, detalhe e
+estatísticas no navegador (os mesmos recursos da `tui` e do `stats`). Pushes em `site/`
+ou no CSV também republicam o site.
+
+Para ativar: em *Settings → Pages*, escolha **GitHub Actions** como *Source*.
+
+```sh
+just update-data   # sync de data/oportunidades.csv localmente
+just site          # monta _site/ e serve em http://localhost:8000
+```
+
 ## Desenvolvimento
 
 Requer [uv](https://docs.astral.sh/uv/) e [just](https://just.systems/).
