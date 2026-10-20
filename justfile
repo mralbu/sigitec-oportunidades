@@ -26,6 +26,14 @@ test *args:
 # Lint + testes (o que a CI deveria rodar)
 check: lint test
 
+# Roda os hooks do prek em todos os arquivos (ou: just pre-commit --files X)
+pre-commit *args="--all-files":
+    uv run prek run {{ args }}
+
+# Instala os hooks do prek no git (pre-commit e pre-push)
+pre-commit-install:
+    uv run prek install
+
 # Roda o CLI, ex.: just run search --open
 run *args:
     uv run sigitec-oportunidades {{ args }}

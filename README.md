@@ -39,8 +39,14 @@ just lint      # ruff + ty
 just test      # pytest (sem acesso à rede)
 just check     # lint + test
 just run ...   # roda o CLI, ex.: just run search --open
+just pre-commit          # hooks do prek em todos os arquivos
+just pre-commit-install  # instala os hooks no git (pre-commit e pre-push)
 just clean     # remove caches e dist/
 ```
+
+Os hooks ([prek](https://prek.j178.dev), `.pre-commit-config.yaml`) checam espaços,
+fim de arquivo, YAML/TOML, conflitos, arquivos grandes e chaves privadas, além de
+`uv lock --check`, `ruff format`, `ruff check` e `ty` a cada commit; o `pytest` roda no push.
 
 Com [direnv](https://direnv.net/), `direnv allow` ativa o `.venv` ao entrar no diretório
 e instala o autocompletar do fish em `~/.config/fish/completions`.
