@@ -29,7 +29,7 @@ uv tool install git+https://github.com/mralbu/sigitec-oportunidades
 
 ```sh
 sigitec-oportunidades sync                   # baixa as oportunidades para um CSV local
-sigitec-oportunidades search corrosão --open # busca entre as abertas
+sigitec-oportunidades search reservatório --open  # busca entre as abertas
 sigitec-oportunidades show OP3449            # detalhe de uma oportunidade
 sigitec-oportunidades stats --open           # contagens por tema, área, TRL…
 sigitec-oportunidades tui                    # interface interativa com filtros
