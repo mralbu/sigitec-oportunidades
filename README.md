@@ -13,13 +13,14 @@ Busque as oportunidades públicas de P&D da Petrobras publicadas no
 
 Busca por termos (sem diferenciar acentos), filtros por status, área, tema, subtema, TRL,
 solução esperada e prazo, o detalhe completo de cada oportunidade e estatísticas. Os
-dados são atualizados toda segunda-feira.
+dados são atualizados uma vez por semana, toda segunda-feira de manhã (por volta das 6h,
+horário de Brasília).
 
 ## Os dados
 
 [`data/oportunidades.csv`](data/oportunidades.csv) tem todas as oportunidades, uma por
 linha, com título, status, prazos, área, tema, TRL, desafio, objetivo, solução esperada e
-parceiras selecionadas. O arquivo é atualizado automaticamente toda semana.
+parceiras selecionadas. O arquivo é atualizado automaticamente toda segunda-feira de manhã.
 
 ## No terminal
 
