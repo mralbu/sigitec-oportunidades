@@ -1,86 +1,39 @@
-# sigitec-oportunidades
+# SIGITEC Oportunidades
 
-CLI para buscar as oportunidades públicas de P&D da Petrobras no
+[![Site](https://img.shields.io/badge/site-mralbu.github.io-2a78d6)](https://mralbu.github.io/sigitec-oportunidades/)
+[![Dados atualizados](https://img.shields.io/github/last-commit/mralbu/sigitec-oportunidades/main?path=data%2Foportunidades.csv&label=dados%20atualizados&color=2a78d6)](https://github.com/mralbu/sigitec-oportunidades/commits/main/data/oportunidades.csv)
+[![Atualização semanal](https://github.com/mralbu/sigitec-oportunidades/actions/workflows/dados-e-site.yml/badge.svg)](https://github.com/mralbu/sigitec-oportunidades/actions/workflows/dados-e-site.yml)
+
+Busque as oportunidades públicas de P&D da Petrobras publicadas no
 [SIGITEC Competitividade](https://sigitec-competitividade.petrobras.com.br/v2/public/opportunities).
 
-Os dados são baixados para um CSV local (`sync`) e consultados offline (`search`, `show`,
-`stats`). A documentação completa do CLI e da API está em `sigitec-oportunidades skill`.
+## No navegador
 
-**Web:** <https://mralbu.github.io/sigitec-oportunidades/>. Busca, filtros e estatísticas
-no navegador, com os dados atualizados toda semana (sem instalar nada).
+**<https://mralbu.github.io/sigitec-oportunidades/>**
 
-## Instalação
+Busca por termos (sem diferenciar acentos), filtros por status, área, tema, subtema, TRL,
+solução esperada e prazo, o detalhe completo de cada oportunidade e estatísticas. Os
+dados são atualizados toda segunda-feira.
 
-```sh
-uv tool install .                 # instala o comando sigitec-oportunidades
-sigitec-oportunidades sync        # baixa listagem e detalhes (incremental)
-sigitec-oportunidades search --open
-sigitec-oportunidades show OP3449
-sigitec-oportunidades stats --open -c theme
-sigitec-oportunidades tui --open      # interface interativa com filtros
-```
+## Os dados
 
-O CSV fica no diretório de dados do usuário (veja `--help`); use `--csv ARQUIVO` ou
-`SIGITEC_OPORTUNIDADES_CSV` para outro local.
+[`data/oportunidades.csv`](data/oportunidades.csv) tem todas as oportunidades, uma por
+linha, com título, status, prazos, área, tema, TRL, desafio, objetivo, solução esperada e
+parceiras selecionadas. O arquivo é atualizado automaticamente toda semana.
 
-### Autocompletar
+## No terminal
 
 ```sh
-eval "$(sigitec-oportunidades completion bash)"   # ~/.bashrc
-eval "$(sigitec-oportunidades completion zsh)"    # ~/.zshrc
-sigitec-oportunidades completion fish > ~/.config/fish/completions/sigitec-oportunidades.fish
+uv tool install git+https://github.com/mralbu/sigitec-oportunidades
 ```
-
-## Dados e site
-
-O workflow [`dados-e-site.yml`](.github/workflows/dados-e-site.yml) roda toda segunda-feira
-(ou manualmente, em *Actions → Dados e site → Run workflow*): faz o `sync` incremental
-de [`data/oportunidades.csv`](data/oportunidades.csv), commita o CSV se mudou e publica no
-GitHub Pages o site estático de [`site/`](site/), com busca, filtros, detalhe e
-estatísticas no navegador (os mesmos recursos da `tui` e do `stats`), em
-<https://mralbu.github.io/sigitec-oportunidades/>. Pushes em `site/` ou no CSV também
-republicam o site.
-
-O Pages usa **GitHub Actions** como *Source* (*Settings → Pages*, ou
-`gh api -X POST repos/OWNER/REPO/pages -f build_type=workflow` num fork).
 
 ```sh
-just update-data   # sync de data/oportunidades.csv localmente
-just site          # monta _site/ e serve em http://localhost:8000
+sigitec-oportunidades sync                   # baixa as oportunidades para um CSV local
+sigitec-oportunidades search corrosão --open # busca entre as abertas
+sigitec-oportunidades show OP3449            # detalhe de uma oportunidade
+sigitec-oportunidades stats --open           # contagens por tema, área, TRL…
+sigitec-oportunidades tui                    # interface interativa com filtros
 ```
 
-## Desenvolvimento
-
-Requer [uv](https://docs.astral.sh/uv/) e [just](https://just.systems/).
-
-```sh
-just sync      # cria/atualiza o .venv
-just format    # ruff format + ruff check --fix
-just lint      # ruff + ty
-just test      # pytest (sem acesso à rede)
-just check     # lint + test
-just run ...   # roda o CLI, ex.: just run search --open
-just pre-commit          # hooks do prek em todos os arquivos
-just pre-commit-install  # instala os hooks no git (pre-commit e pre-push)
-just clean     # remove caches e dist/
-```
-
-Os hooks ([prek](https://prek.j178.dev), `.pre-commit-config.yaml`) checam espaços,
-fim de arquivo, YAML/TOML, conflitos, arquivos grandes e chaves privadas, além de
-`uv lock --check`, `ruff format`, `ruff check` e `ty` a cada commit; o `pytest` roda no push.
-
-Com [direnv](https://direnv.net/), `direnv allow` ativa o `.venv` ao entrar no diretório
-e instala o autocompletar do fish em `~/.config/fish/completions`.
-
-## Estrutura
-
-| Módulo | Conteúdo |
-|---|---|
-| `api.py` | Cliente HTTP da API pública do SIGITEC |
-| `store.py` | CSV local e `sync` incremental |
-| `query.py` | Filtros do `search` e contagens do `stats` (funções puras) |
-| `render.py` | Normalização de texto, datas e Markdown |
-| `cli.py` | Comandos (click) |
-| `tui.py` | Interface interativa (Textual) |
-| `skill.py` | Texto do comando `skill` |
-| `constants.py` | URLs, status e colunas do CSV |
+`sigitec-oportunidades --help` lista todas as opções e `sigitec-oportunidades skill`
+explica o CLI e a API do SIGITEC em detalhe.
