@@ -10,11 +10,13 @@ from .constants import API
 
 HEADERS = {"Accept": "application/json"}
 TIMEOUT = 60
+# A listagem (~1 MB) leva ~30 s a partir do Brasil e mais de 60 s de fora (GitHub Actions).
+LIST_TIMEOUT = 300
 
 
-def fetch_list() -> list[dict]:
+def fetch_list(timeout: float = LIST_TIMEOUT) -> list[dict]:
     """Listagem completa (só campos de resumo)."""
-    with httpx2.Client(timeout=TIMEOUT, headers=HEADERS) as c:
+    with httpx2.Client(timeout=timeout, headers=HEADERS) as c:
         r = c.get(f"{API}/getAllPublicOpportunities")
         r.raise_for_status()
         return r.json()

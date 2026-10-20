@@ -70,6 +70,13 @@ def cli(ctx: click.Context, csv_path: Path) -> None:
     show_default=True,
     help="Interrompe os detalhes após N falhas seguidas.",
 )
+@click.option(
+    "--timeout",
+    type=click.IntRange(1),
+    default=api.LIST_TIMEOUT,
+    show_default=True,
+    help="Tempo máximo de espera pela listagem, em segundos.",
+)
 @click.pass_obj
 def sync(
     csv_path: Path,
@@ -78,6 +85,7 @@ def sync(
     concurrency: int,
     retries: int,
     max_failures: int,
+    timeout: int,
 ) -> None:
     """Baixa as oportunidades para o CSV local (incremental)."""
     store.run_sync(
@@ -87,6 +95,7 @@ def sync(
         concurrency=concurrency,
         retries=retries,
         max_failures=max_failures,
+        list_timeout=timeout,
     )
 
 

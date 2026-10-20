@@ -78,11 +78,12 @@ def run_sync(
     concurrency: int = 4,
     retries: int = 1,
     max_failures: int = 5,
+    list_timeout: float = api.LIST_TIMEOUT,
 ) -> dict[int, dict]:
     cache = load_cache(path)
     # A chave é o numberOP: o mesmo id aparece no SIGITEC novo e no antigo.
     with console.status("Baixando listagem…"):
-        summaries = {o["numberOP"]: o for o in api.fetch_list()}
+        summaries = {o["numberOP"]: o for o in api.fetch_list(list_timeout)}
 
     def needs_detail(op: int) -> bool:
         new = summaries[op]

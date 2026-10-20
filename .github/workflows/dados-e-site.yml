@@ -48,13 +48,24 @@ jobs:
       - name: Instalar
         run: uv sync --frozen --no-dev
 
+      # Diagnóstico: mede a API a partir do runner (lenta ou bloqueada?). Não falha o job.
+      - name: Testar a API
+        continue-on-error: true
+        run: |
+          api=https://sigitec-competitividade.petrobras.com.br/v2/ms-authorization/opportunity
+          for path in public-opportunity/2259 getAllPublicOpportunities; do
+            curl -sS -o /dev/null --max-time 300 \
+              -w "$path: HTTP %{http_code} · conexão %{time_connect}s · TLS %{time_appconnect}s · 1º byte %{time_starttransfer}s · total %{time_total}s · %{size_download} bytes\n" \
+              "$api/$path" || echo "$path: falhou (curl $?)"
+          done
+
       - name: Sync
         env:
           FULL: ${{ inputs.full && '--full' || '' }}
         run: |
-          uv run --frozen sigitec-oportunidades --csv "$CSV" sync $FULL --retries 3
+          uv run --frozen --no-dev sigitec-oportunidades --csv "$CSV" sync $FULL --retries 3
           # O SIGITEC às vezes fica instável: uma segunda passada só baixa o que faltou.
-          uv run --frozen sigitec-oportunidades --csv "$CSV" sync --retries 3
+          uv run --frozen --no-dev sigitec-oportunidades --csv "$CSV" sync --retries 3
 
       - name: Commit do CSV
         run: |

@@ -31,6 +31,7 @@ CLI para buscar e ler as **oportunidades públicas** de P&D da Petrobras publica
 | `-j, --concurrency` | Requisições simultâneas de detalhe (padrão 4) |
 | `--retries` | Novas tentativas por detalhe (padrão 1) |
 | `--max-failures` | Interrompe após N falhas seguidas (padrão 5) |
+| `--timeout` | Espera máxima pela listagem, em segundos (padrão 300; ela leva ~30 s) |
 
 ### `search [TERMOS...]` — busca no CSV
 

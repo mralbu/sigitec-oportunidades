@@ -75,7 +75,7 @@ class FakeAPI:
     details: dict[int, dict] = field(default_factory=dict)
     requested: list[list[int]] = field(default_factory=list)
 
-    def fetch_list(self) -> list[dict]:
+    def fetch_list(self, timeout: float | None = None) -> list[dict]:
         return self.listing
 
     async def fetch_details(self, ids, concurrency, retries, max_failures):
