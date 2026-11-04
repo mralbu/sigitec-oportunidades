@@ -70,6 +70,17 @@ def merge(summary: dict, detail: dict | None, previous: dict | None) -> dict:
     return row
 
 
+def with_fresh_detail(row: dict | None, opp_id: int, detail: dict) -> dict:
+    """Detalhe recém-baixado da API (`show --online`) sobre a linha do CSV.
+
+    O detalhe prevalece; da linha ficam só id/numberOP (já inteiros) e o que o detalhe
+    não traz (ex.: publicationDate vem nulo no detalhe).
+    """
+    ids = {k: row[k] for k in ("id", "numberOP")} if row else {"id": opp_id}
+    fresh = {k: v for k, v in merge(ids, detail, None).items() if v is not None}
+    return {k: v for k, v in (row or {}).items() if v is not None} | fresh
+
+
 def run_sync(
     path: Path,
     *,

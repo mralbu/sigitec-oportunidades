@@ -44,7 +44,7 @@ def selected_statuses(statuses: tuple[str, ...], only_open: bool) -> set[str]:
     "--csv",
     "csv_path",
     type=click.Path(dir_okay=False, path_type=Path),
-    default=DEFAULT_CSV_NAME,
+    default=DEFAULT_CSV,
     envvar=CSV_ENVVAR,
     show_default=True,
     help=f"Arquivo CSV local (ou variável {CSV_ENVVAR}).",
@@ -250,7 +250,7 @@ def show(
         else:
             if detail is None:
                 raise click.ClickException(f"Oportunidade {opp_id} não encontrada.")
-            data = store.merge(row or {"id": opp_id}, detail, None)
+            data = store.with_fresh_detail(row, opp_id, detail)
     elif legacy:
         console.print("[dim]Oportunidade do SIGITEC antigo: só o resumo está disponível.[/]")
     assert data is not None

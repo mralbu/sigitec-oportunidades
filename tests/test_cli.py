@@ -5,7 +5,10 @@ import pytest
 from click.testing import CliRunner
 
 from sigitec_oportunidades import api
-from sigitec_oportunidades.cli import cli
+from sigitec_oportunidades.cli import DEFAULT_CSV, cli
+from sigitec_oportunidades.constants import APP_NAME, CSV_ENVVAR
+
+from .conftest import detail
 
 
 @pytest.fixture
@@ -41,6 +44,24 @@ def test_show_by_op_markdown(run):
 def test_show_by_id_prefers_current_sigitec(run):
     # O id 2259 é a OP3459 (atual) e a OP900 (antigo).
     assert json.loads(run("show", "2259", "--json").stdout)["numberOP"] == 3459
+
+
+def test_show_online_prefers_fresh_detail(run, monkeypatch):
+    monkeypatch.setattr(
+        api, "fetch_one", lambda opp_id: detail(3459, opp_id, theme="Novo", status="F")
+    )
+    data = json.loads(run("show", "OP3459", "--online", "--json").stdout)
+    assert data["theme"] == "Novo"
+    assert data["status"] == "F"
+    assert data["numberOP"] == 3459  # int da linha, não o texto do detalhe
+    assert data["publicationDate"] is not None  # vem nulo no detalhe; fica o do CSV
+
+
+def test_csv_defaults_to_user_data_dir(monkeypatch):
+    monkeypatch.delenv(CSV_ENVVAR, raising=False)
+    ctx = cli.make_context(APP_NAME, ["skill"])
+    assert ctx.params["csv_path"] == DEFAULT_CSV
+    assert DEFAULT_CSV.is_absolute()
 
 
 def test_show_writes_file(run, tmp_path: Path):
