@@ -10,6 +10,8 @@ PAGE_URL = f"{SITE}/v2/public/opportunity/{{id}}"
 LEGACY_PAGE_URL = f"{SITE}/v2/public/opportunitysigitec/{{id}}"
 
 APP_NAME = "sigitec-oportunidades"
+# Site estático (GitHub Pages), com barra no fim.
+SITE_URL = "https://mralbu.github.io/sigitec-oportunidades/"
 CSV_ENVVAR = "SIGITEC_OPORTUNIDADES_CSV"
 
 STATUS = {

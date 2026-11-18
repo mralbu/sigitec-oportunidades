@@ -16,6 +16,13 @@ solução esperada e prazo, o detalhe completo de cada oportunidade e estatísti
 dados são atualizados uma vez por semana, toda segunda-feira de manhã (por volta das 6h,
 horário de Brasília).
 
+## Feed RSS
+
+Para acompanhar as novas oportunidades num leitor de feeds, assine
+**<https://mralbu.github.io/sigitec-oportunidades/feed.xml>**. Ele traz as 50 publicadas
+mais recentemente, com prazo, área, tema, TRL e o começo do objetivo; cada item abre a
+oportunidade no site. Como os dados, o feed é atualizado toda segunda-feira de manhã.
+
 ## Os dados
 
 [`data/oportunidades.csv`](data/oportunidades.csv) tem todas as oportunidades, uma por
@@ -34,6 +41,7 @@ sigitec-oportunidades search reservatório --open  # busca entre as abertas
 sigitec-oportunidades show OP3449            # detalhe de uma oportunidade
 sigitec-oportunidades stats --open           # contagens por tema, área, TRL…
 sigitec-oportunidades tui                    # interface interativa com filtros
+sigitec-oportunidades feed -o feed.xml       # feed RSS com as mais recentes
 ```
 
 `sigitec-oportunidades --help` lista todas as opções e `sigitec-oportunidades skill`

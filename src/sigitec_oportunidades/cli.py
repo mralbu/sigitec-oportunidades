@@ -11,9 +11,9 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.table import Table
 
-from . import api, query, store
+from . import api, feed, query, store
 from .console import console
-from .constants import APP_NAME, CSV_ENVVAR, STATS_COLUMNS, STATUS, STATUS_COLORS
+from .constants import APP_NAME, CSV_ENVVAR, SITE_URL, STATS_COLUMNS, STATUS, STATUS_COLORS
 from .render import fmt_date, public_fields, to_markdown
 from .skill import SKILL
 
@@ -387,6 +387,39 @@ def completion(shell: str) -> None:
     comp_cls = get_completion_class(shell)
     assert comp_cls is not None  # SHELLS só tem shells suportados pelo click
     click.echo(comp_cls(cli, {}, APP_NAME, COMPLETE_VAR).source())
+
+
+@cli.command("feed", short_help="Gera um feed RSS com as oportunidades mais recentes.")
+@click.option(
+    "-o",
+    "--output",
+    type=click.Path(dir_okay=False, path_type=Path),
+    help="Arquivo de saída (padrão: imprime na tela).",
+)
+@click.option(
+    "-n",
+    "--limit",
+    type=click.IntRange(1),
+    default=feed.DEFAULT_LIMIT,
+    show_default=True,
+    help="Número de oportunidades no feed.",
+)
+@click.option("--site-url", default=SITE_URL, show_default=True, help="URL do site (com / no fim).")
+@click.pass_obj
+def feed_command(csv_path: Path, output: Path | None, limit: int, site_url: str) -> None:
+    """Gera um feed RSS 2.0 com as oportunidades publicadas mais recentemente.
+
+    Usa só o CSV local (rode `sync` antes). Os links abrem cada oportunidade no site.
+    """
+    if not site_url.endswith("/"):
+        site_url += "/"
+    xml = feed.build_rss(store.load_cache(csv_path), site_url=site_url, limit=limit)
+    if output is None:
+        click.echo(xml, nl=False)
+        return
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(xml, encoding="utf-8")
+    console.print(f"[green]Feed salvo em {output}[/]")
 
 
 @cli.command()

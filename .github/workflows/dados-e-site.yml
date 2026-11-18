@@ -99,11 +99,16 @@ jobs:
           ref: ${{ github.ref }}
           fetch-depth: 0
 
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
       - name: Montar o site
         run: |
           mkdir -p _site
           cp -r site/. _site/
           cp "$CSV" _site/oportunidades.csv
+          uv run --frozen --no-dev sigitec-oportunidades --csv "$CSV" feed -o _site/feed.xml
           printf '{"updatedAt": "%s", "commit": "%s"}\n' \
             "$(git log -1 --format=%cI -- "$CSV")" "$(git rev-parse --short HEAD)" \
             > _site/meta.json

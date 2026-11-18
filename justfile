@@ -42,12 +42,13 @@ run *args:
 update-data *args:
     uv run sigitec-oportunidades --csv data/oportunidades.csv sync {{ args }}
 
-# Monta o site estático em _site/ (site/ + CSV), como no deploy do GitHub Pages
+# Monta o site estático em _site/ (site/ + CSV + feed RSS), como no deploy do GitHub Pages
 site-build:
     rm -rf _site
     mkdir -p _site
     cp -r site/. _site/
     cp data/oportunidades.csv _site/oportunidades.csv
+    uv run sigitec-oportunidades --csv data/oportunidades.csv feed -o _site/feed.xml
 
 # Monta e serve o site em http://localhost:8000
 site port="8000": site-build

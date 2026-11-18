@@ -80,6 +80,14 @@ tabela de resultados e detalhe em Markdown da linha selecionada. `QUERY`, `-s/--
 e `--open` definem os filtros iniciais. Teclas: `/` buscar, `f` mostrar/ocultar
 filtros, `x` limpar filtros, `o` abrir a página no navegador, `q` sair.
 
+### `feed` — feed RSS das oportunidades mais recentes
+
+Gera um feed RSS 2.0 a partir do CSV local com as oportunidades publicadas mais
+recentemente (`-n/--limit`, padrão 50), da mais nova para a mais antiga. Cada item traz
+prazo, status, área, tema, TRL, solução esperada e o começo do objetivo, e o link abre a
+oportunidade no site (`--site-url`, padrão o GitHub Pages do projeto). `-o ARQUIVO`
+salva em vez de imprimir. O site publica o feed em `feed.xml` toda segunda-feira.
+
 ### `completion SHELL` — script de autocompletar
 
 `SHELL` é `bash`, `zsh` ou `fish`. Exemplos:
