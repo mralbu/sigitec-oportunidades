@@ -38,6 +38,9 @@ select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF"]
 [tool.ruff.lint.per-file-ignores]
 # Tabelas Markdown do texto do `skill`.
 "src/sigitec_oportunidades/skill.py" = ["E501"]
+# Os caracteres tipográficos (– ’ “ ”) são o objetivo do módulo.
+"src/sigitec_oportunidades/fixtext.py" = ["RUF001", "RUF002", "RUF003"]
+"tests/test_fixtext.py" = ["RUF001"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

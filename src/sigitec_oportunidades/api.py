@@ -7,6 +7,7 @@ from rich.progress import Progress, TaskID
 
 from .console import console
 from .constants import API
+from .fixtext import fix_record
 
 HEADERS = {"Accept": "application/json"}
 TIMEOUT = 60
@@ -19,7 +20,7 @@ def fetch_list(timeout: float = LIST_TIMEOUT) -> list[dict]:
     with httpx2.Client(timeout=timeout, headers=HEADERS) as c:
         r = c.get(f"{API}/getAllPublicOpportunities")
         r.raise_for_status()
-        return r.json()
+        return [fix_record(o) for o in r.json()]
 
 
 def fetch_one(opp_id: int) -> dict | None:
@@ -29,7 +30,7 @@ def fetch_one(opp_id: int) -> dict | None:
         if r.status_code == 404 or (r.is_success and not r.content):
             return None
         r.raise_for_status()
-        return r.json()
+        return fix_record(r.json())
 
 
 async def fetch_details(
@@ -56,7 +57,7 @@ async def fetch_details(
                         if r.status_code == 404:
                             break
                         r.raise_for_status()
-                        results[opp_id] = r.json()
+                        results[opp_id] = fix_record(r.json())
                         consecutive = 0
                         break
                     except httpx2.HTTPError, ValueError:

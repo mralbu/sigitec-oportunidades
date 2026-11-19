@@ -8,6 +8,7 @@ from pathlib import Path
 from . import api
 from .console import console
 from .constants import COLUMNS, LIST_SEP, STALE_AFTER, SUMMARY_KEYS
+from .fixtext import fix_text
 from .render import page_url
 
 
@@ -22,7 +23,8 @@ def to_cell(value) -> str:
 
 
 def from_row(row: dict[str, str]) -> dict:
-    d: dict = {k: (v if v != "" else None) for k, v in row.items()}
+    # fix_text também conserta CSVs gravados antes da correção do "¿".
+    d: dict = {k: (fix_text(v) if v != "" else None) for k, v in row.items()}
     for k in ("id", "numberOP"):
         d[k] = int(d[k])
     d["nodeBackend"] = d.get("nodeBackend") == "true"
