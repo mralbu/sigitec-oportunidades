@@ -11,6 +11,7 @@
   --border: rgba(11, 11, 11, 0.10);
   --accent: #2a78d6;
   --accent-wash: rgba(42, 120, 214, 0.10);
+  --rss: #d96b16;
   --bar: #2a78d6;
   --invalid: #d03b3b;
   /* Status: identidade, sempre com rótulo ao lado. */
@@ -35,6 +36,7 @@
     --border: rgba(255, 255, 255, 0.10);
     --accent: #3987e5;
     --accent-wash: rgba(57, 135, 229, 0.16);
+    --rss: #ea8434;
     --bar: #3987e5;
     --invalid: #e66767;
     --st-A: #0ca30c;
@@ -57,6 +59,7 @@
   --border: rgba(255, 255, 255, 0.10);
   --accent: #3987e5;
   --accent-wash: rgba(57, 135, 229, 0.16);
+  --rss: #ea8434;
   --bar: #3987e5;
   --invalid: #e66767;
   --st-A: #0ca30c;
@@ -85,6 +88,12 @@ kbd {
   border: 1px solid var(--border);
   border-radius: 4px;
   background: var(--surface);
+}
+code {
+  font: 12.5px ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--surface-2);
 }
 
 /* ------------------------------------------------------------------ topo */
@@ -115,6 +124,7 @@ kbd {
   box-shadow: 0 0 0 1px var(--border);
   font-weight: 600;
 }
+.top-actions { display: flex; align-items: center; gap: 8px; }
 .ghost {
   border: 1px solid var(--border);
   background: var(--surface);
@@ -123,6 +133,18 @@ kbd {
   cursor: pointer;
 }
 .ghost:hover { background: var(--surface-2); }
+.rss-btn { display: inline-flex; align-items: center; gap: 6px; }
+.rss-icon { color: var(--rss); flex: none; }
+.primary {
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.primary:hover { filter: brightness(1.08); }
 .wide { width: 100%; margin-top: 16px; }
 
 /* ------------------------------------------------------------------ layout */
@@ -292,6 +314,108 @@ section[hidden] { display: none !important; }
   max-width: 320px;
 }
 #tooltip b { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ diálogo RSS */
+#rss-dialog {
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.24);
+  width: min(500px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+}
+#rss-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+#rss-dialog .dialog-body {
+  padding: 18px 20px;
+}
+#rss-dialog .dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+#rss-dialog h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 650;
+}
+#rss-dialog .dialog-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 20px;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#rss-dialog .dialog-close:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+#rss-dialog p {
+  margin: 0 0 14px;
+  color: var(--ink-2);
+}
+#rss-dialog .rss-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+#rss-dialog .rss-url-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+#rss-dialog input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--page);
+  font: 12.5px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+#rss-dialog input:focus-visible, #rss-dialog a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+#rss-dialog h3 {
+  font-size: 12.5px;
+  margin: 0 0 8px;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+#rss-dialog .rss-steps {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+#rss-dialog .dialog-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
 
 /* ------------------------------------------------------------------ telas estreitas */
 @media (max-width: 1000px) {

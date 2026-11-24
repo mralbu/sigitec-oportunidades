@@ -606,6 +606,44 @@ function reset() {
   apply();
 }
 
+function bindRss() {
+  const dialog = $("#rss-dialog");
+  const input = $("#rss-url");
+  const copyBtn = $("#copy-rss");
+  if (location.protocol.startsWith("http")) {
+    input.value = new URL("feed.xml", location.href).href;
+  }
+
+  let copiedTimer;
+  const resetCopy = () => {
+    clearTimeout(copiedTimer);
+    copyBtn.textContent = "Copiar";
+  };
+
+  $("#open-rss").addEventListener("click", () => dialog.showModal());
+  $("#close-rss").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("close", resetCopy);
+  input.addEventListener("click", () => input.select());
+
+  copyBtn.addEventListener("click", async () => {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(input.value);
+      ok = true;
+    } catch {
+      input.select();
+      ok = document.execCommand("copy");
+    }
+    if (!ok) return;
+    clearTimeout(copiedTimer);
+    copyBtn.textContent = "Copiado!";
+    copiedTimer = setTimeout(() => { copyBtn.textContent = "Copiar"; }, 1800);
+  });
+}
+
 function bind() {
   let timer;
   $("#terms").addEventListener("input", () => {
@@ -625,6 +663,7 @@ function bind() {
   });
 
   document.addEventListener("keydown", (e) => {
+    if ($("#rss-dialog").open) return;
     const typing = e.target.matches("input, select, textarea");
     if (e.key === "Escape" && typing) {
       e.target.blur();
@@ -648,6 +687,7 @@ function bind() {
 }
 
 async function main() {
+  bindRss();
   try {
     await load();
   } catch (err) {

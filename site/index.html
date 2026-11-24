@@ -21,7 +21,17 @@
       <button role="tab" id="tab-list" aria-selected="true" aria-controls="view-list">Lista</button>
       <button role="tab" id="tab-stats" aria-selected="false" aria-controls="view-stats">Estatísticas</button>
     </nav>
-    <button class="ghost" id="toggle-filters" aria-expanded="true" aria-controls="filters" title="Filtros (f)">Filtros</button>
+    <div class="top-actions">
+      <button type="button" class="ghost rss-btn" id="open-rss" aria-haspopup="dialog" aria-controls="rss-dialog" title="Assinar feed RSS">
+        <svg class="rss-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+          <circle cx="3.5" cy="12.5" r="1.6" fill="currentColor"/>
+          <path d="M2.5 7.5a6 6 0 0 1 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M2.5 2.5a11 11 0 0 1 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        RSS
+      </button>
+      <button type="button" class="ghost" id="toggle-filters" aria-expanded="true" aria-controls="filters" title="Filtros (f)">Filtros</button>
+    </div>
   </header>
 
   <div class="layout">
@@ -82,5 +92,41 @@
   </div>
 
   <div id="tooltip" role="tooltip" hidden></div>
+
+  <dialog id="rss-dialog" aria-labelledby="rss-title">
+    <div class="dialog-body">
+      <div class="dialog-head">
+        <h2 id="rss-title">
+          <svg class="rss-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <circle cx="3.5" cy="12.5" r="1.6" fill="currentColor"/>
+            <path d="M2.5 7.5a6 6 0 0 1 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M2.5 2.5a11 11 0 0 1 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Feed RSS
+        </h2>
+        <button type="button" class="dialog-close" id="close-rss" aria-label="Fechar">&times;</button>
+      </div>
+
+      <p>Receba as novas oportunidades publicadas no SIGITEC sem precisar abrir o site. O feed traz as 50 mais recentes e é atualizado toda segunda-feira de manhã.</p>
+
+      <label class="rss-label" for="rss-url">Endereço do feed</label>
+      <div class="rss-url-row">
+        <input id="rss-url" type="text" readonly value="https://mralbu.github.io/sigitec-oportunidades/feed.xml">
+        <button type="button" class="primary" id="copy-rss" autofocus>Copiar</button>
+      </div>
+
+      <h3>Como acompanhar</h3>
+      <ol class="rss-steps">
+        <li>Copie o endereço acima.</li>
+        <li>Cole num leitor de feeds — por exemplo, <a href="https://feedly.com/" target="_blank" rel="noopener">Feedly</a>, <a href="https://www.inoreader.com/" target="_blank" rel="noopener">Inoreader</a>, <a href="https://netnewswire.com/" target="_blank" rel="noopener">NetNewsWire</a> (Apple), <a href="https://gitlab.com/spacecowboy/Feeder" target="_blank" rel="noopener">Feeder</a> (Android) ou <a href="https://www.thunderbird.net/" target="_blank" rel="noopener">Thunderbird</a>.</li>
+        <li>Para equipes ou e-mail: no Slack use <code>/feed subscribe</code> com o endereço; no Microsoft Teams use um fluxo de RSS; ou assine via RSS para e-mail (como <a href="https://blogtrottr.com/" target="_blank" rel="noopener">Blogtrottr</a> ou <a href="https://feedrabbit.com/" target="_blank" rel="noopener">Feedrabbit</a>).</li>
+      </ol>
+
+      <div class="dialog-foot">
+        <a href="feed.xml" target="_blank" rel="noopener">Abrir feed.xml</a>
+        <a href="https://aboutfeeds.com/" target="_blank" rel="noopener">O que é RSS?</a>
+      </div>
+    </div>
+  </dialog>
 </body>
 </html>
